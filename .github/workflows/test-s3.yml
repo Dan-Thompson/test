@@ -1,0 +1,21 @@
+name: Test AWS OIDC S3 List
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write    # Required for OIDC
+  contents: read     # Allows checkout if needed
+
+jobs:
+  list-s3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials from OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::507371845163:role/github-role
+          aws-region: eu-west-1   # Change if needed
+
+      - name: List objects in S3 bucket
+        run: aws s3 ls s3://daniel-storage --recursive
